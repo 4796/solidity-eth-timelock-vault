@@ -1,0 +1,13 @@
+
+.deps/
+.states/
+
+
+artifacts/
+
+
+remix.config1.json
+
+
+.DS_Store
+Thumbs.db
