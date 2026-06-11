@@ -1,28 +1,51 @@
-REMIX DEFAULT WORKSPACE
+# Solidity ETH Timelock Vault
 
-Remix default workspace is present when:
-i. Remix loads for the very first time 
-ii. A new workspace is created with 'Default' template
-iii. There are no files existing in the File Explorer
+A minimal smart contract that lets users lock ETH deposits for a self-defined duration.
+No admin keys. No early withdrawals. Funds release only when the lock expires.
 
-This workspace contains 3 directories:
+Deployed and verified on **Sepolia testnet**.
 
-1. 'contracts': Holds three contracts with increasing levels of complexity.
-2. 'scripts': Contains four typescript files to deploy a contract. It is explained below.
-3. 'tests': Contains one Solidity test file for 'Ballot' contract & one JS test file for 'Storage' contract.
+---
 
-SCRIPTS
+## How It Works
 
-The 'scripts' folder has two typescript files which help to deploy the 'Storage' contract using 'ethers.js' libraries.
+1. Call `deposit(lockDuration)` with ETH attached — `lockDuration` is in seconds
+2. The contract records your deposit with an unlock timestamp
+3. Call `withdraw(depositIndex)` after the lock expires to retrieve your ETH
+4. Multiple independent deposits per address are supported
 
-For the deployment of any other contract, just update the contract name from 'Storage' to the desired contract and provide constructor arguments accordingly 
-in the file `deploy_with_ethers.ts`
+---
 
-In the 'tests' folder there is a script containing Mocha-Chai unit tests for 'Storage' contract.
+## Contract
 
-To run a script, right click on file name in the file explorer and click 'Run'. Remember, Solidity file must already be compiled.
-Output from script will appear in remix terminal.
+| Function | Description |
+|---|---|
+| `deposit(uint256 lockDuration)` | Lock ETH for a given number of seconds |
+| `withdraw(uint256 depositIndex)` | Withdraw after lock expires |
+| `getDeposits(address user)` | View all deposits for an address |
+| `getTimeRemaining(address user, uint256 index)` | Seconds until a deposit unlocks |
 
-Please note, require/import is supported in a limited manner for Remix supported modules.
-For now, modules supported by Remix are ethers, swarmgw, chai, multihashes, remix and hardhat only for hardhat.ethers object/plugin.
-For unsupported modules, an error like this will be thrown: '<module_name> module require is not supported by Remix IDE' will be shown.
+---
+
+## Deployment
+
+**Network:** Sepolia Testnet  
+**Contract address:** 0xFE697f169274Bc33b19799BA407Db40866C4cD1A
+**Etherscan:** [Example of transaction](https://sepolia.etherscan.io/tx/0x45215452212104d115084799f819f76caf8ad16a58ededb280be2007a9c063cf)
+
+---
+
+## Run Locally (Remix IDE)
+
+1. Open [Remix IDE](https://remix.ethereum.org)
+2. Paste `contracts/TrustVault.sol`
+3. Compile with Solidity `^0.8.20`
+4. Deploy via **Injected Provider** on Sepolia
+
+---
+
+## Tech
+
+- Solidity `^0.8.20`
+- Remix IDE
+- Sepolia testnet
